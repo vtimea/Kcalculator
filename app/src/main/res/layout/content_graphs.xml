@@ -7,13 +7,20 @@
     android:fitsSystemWindows="true">
 
     <!-- Main body of the screen -->
-    <android.widget.LinearLayout
+    <android.widget.RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical">
 
-    </android.widget.LinearLayout>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="No graphs yet" />
+    </android.widget.RelativeLayout>
 
     <!-- content of the drawer -->
     <android.support.design.widget.NavigationView

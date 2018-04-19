@@ -5,6 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="vtimea.kcalculator.activities.AddItemActivity">
+    <TextView
+        android:id="@+id/tvAddDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/tvdate_margin_left"
+        android:layout_marginTop="@dimen/tvdate_margin_top"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Today"/>
 
     <EditText
         android:id="@+id/etDesc"
@@ -16,7 +26,7 @@
         android:layout_marginLeft="17dp"
         android:layout_marginEnd="17dp"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Description of food" />
@@ -65,4 +75,5 @@
         android:clickable="true"
         app:backgroundTint="@android:color/holo_red_light"
         app:srcCompat="@mipmap/ic_cancel" />
+
 </android.widget.RelativeLayout>

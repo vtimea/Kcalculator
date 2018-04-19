@@ -44,7 +44,6 @@ public class HomeActivity extends AppCompatActivity {
     private PagerAdapter mPagerAdapter;
 
     private static Date currentDate;    //current day's start that the activity is showing 00:00:00
-    private static Date endDate;        //current day's end that the activity is showing 23:59:59
     private static Calendar calendar;
 
     private TextView tvDate;
@@ -150,6 +149,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), AddItemActivity.class);
+                intent.putExtra("Date", currentDate.getTime());
                 startActivity(intent);
             }
         });
@@ -164,8 +164,7 @@ public class HomeActivity extends AppCompatActivity {
     private void initTvDate(){
         //set date to today
         Date temp = Calendar.getInstance().getTime();
-        currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate());
-        endDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), 23, 59, 59);
+        currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), 0, 0, 0);
 
         //datepicker
         calendar = Calendar.getInstance();
@@ -213,7 +212,7 @@ public class HomeActivity extends AppCompatActivity {
         DaoSession daoSession = DataManager.getInstance().getDaoSession();
         FoodItemDao foodItemDao = daoSession.getFoodItemDao();
         QueryBuilder queryBuilder = foodItemDao.queryBuilder()
-                .where(FoodItemDao.Properties.Date.between(currentDate, endDate));
+                .where(FoodItemDao.Properties.Date.eq(currentDate));
         List<FoodItem> list = queryBuilder.list();
 
         return list;
@@ -237,9 +236,7 @@ public class HomeActivity extends AppCompatActivity {
         //update sumOfCalories
         Date temp = calendar.getTime();
         currentDate = new Date(temp.getYear(), temp.getMonth(), temp.getDate(), 0, 0, 0);
-        endDate = new Date(temp.getYear(), temp.getMonth(), temp.getDate(), 23, 59, 59);
         setTvCalories();
-
     }
 
 }

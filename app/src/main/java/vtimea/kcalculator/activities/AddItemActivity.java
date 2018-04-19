@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,8 +28,11 @@ public class AddItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
+        //set date
         Date temp = Calendar.getInstance().getTime();
-        currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), temp.getHours(), temp.getMinutes());
+        temp = new Date(1997, temp.getMonth(),  temp.getDate(), 0, 0, 0);
+        currentDate = new Date(getIntent().getLongExtra("Date", temp.getTime()));
+        initTvDate(currentDate);
 
         initFabOk();
         initFabCancel();
@@ -43,15 +48,11 @@ public class AddItemActivity extends AppCompatActivity {
                 String etCals = ((EditText) findViewById(R.id.etCals)).getText().toString();
                 int cals = Integer.parseInt(etCals);
 
-                Date temp = Calendar.getInstance().getTime();
-                currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), temp.getHours(), temp.getMinutes());
-
                 String photoId = "?";
 
                 Log.i("TIMI", "Decription: " + description);
                 Log.i("TIMI", "Calories: " + cals);
                 Log.i("TIMI", "Date: " + currentDate);
-                Log.i("TIMI", "PhotoID: " + photoId);
                 addNewItem(description, cals, currentDate, photoId);
                 finish();
             }
@@ -66,6 +67,21 @@ public class AddItemActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void initTvDate(Date date){
+        TextView tvDate = (TextView) findViewById(R.id.tvAddDate);
+        String myFormat;
+        if(Calendar.getInstance().getTime().getYear() == currentDate.getYear() &&
+                Calendar.getInstance().getTime().getMonth() == currentDate.getMonth() &&
+                Calendar.getInstance().getTime().getDate() == currentDate.getDate()) {
+            tvDate.setText("Today");
+        }
+        else {
+            myFormat = "yyyy/MM/dd";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+            tvDate.setText(sdf.format(currentDate));
+        }
     }
 
     private void addNewItem(String description, int cals, Date date, String photoId){

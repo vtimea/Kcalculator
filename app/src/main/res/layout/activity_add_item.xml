@@ -6,11 +6,61 @@
     android:layout_height="match_parent"
     tools:context="vtimea.kcalculator.activities.AddItemActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <EditText
+        android:id="@+id/etDesc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="17dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Description of food" />
+
+    <EditText
+        android:id="@+id/etCals"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etDesc"
+        android:layout_alignStart="@+id/etDesc"
+        android:layout_below="@+id/etDesc"
+        android:layout_marginTop="11dp"
+        android:ems="10"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/btnAddPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Add a new item" />
+        android:layout_alignBottom="@+id/etCals"
+        android:layout_alignEnd="@+id/etDesc"
+        android:layout_alignRight="@+id/etDesc"
+        android:text="Add photo" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btnAddPhoto"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/btnAddPhoto"
+        android:layout_marginBottom="22dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/holo_green_light"
+        app:srcCompat="@mipmap/ic_check" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnAddPhoto"
+        android:layout_alignStart="@+id/btnAddPhoto"
+        android:layout_alignTop="@+id/fabOk"
+        android:clickable="true"
+        app:backgroundTint="@android:color/holo_red_light"
+        app:srcCompat="@mipmap/ic_cancel" />
 </android.widget.RelativeLayout>

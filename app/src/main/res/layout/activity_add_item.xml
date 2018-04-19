@@ -19,7 +19,7 @@
         android:layout_marginTop="24dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Description of food" />
+        android:hint="Description of food" />
 
     <EditText
         android:id="@+id/etCals"
@@ -43,8 +43,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabOk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignEnd="@+id/btnAddPhoto"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/btnAddPhoto"
@@ -55,11 +55,13 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnAddPhoto"
-        android:layout_alignStart="@+id/btnAddPhoto"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignTop="@+id/fabOk"
+        android:layout_marginEnd="41dp"
+        android:layout_marginRight="41dp"
+        android:layout_toLeftOf="@+id/fabOk"
+        android:layout_toStartOf="@+id/fabOk"
         android:clickable="true"
         app:backgroundTint="@android:color/holo_red_light"
         app:srcCompat="@mipmap/ic_cancel" />

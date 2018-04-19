@@ -39,61 +39,10 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDrawerLayout = findViewById(R.id.home_activity_drawer_layout);
-
-//        init navigation drawer
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.getMenu().getItem(0).setChecked(true);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        item.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        Intent intent;
-                        switch (item.getOrder()){
-                            //home
-                            case 0:
-                                //stay on home activity
-                                return true;
-                            //graphs
-                            case 1:
-                                intent = new Intent(getBaseContext(), GraphsActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                                return true;
-                            //settings
-                            case 2:
-                                intent = new Intent(getBaseContext(), SettingsActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                                return true;
-                            default:
-                                //stay on the activity
-                                return true;
-                        }
-                    }
-                }
-        );
-
-//      init fab
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), AddItemActivity.class);
-                startActivity(intent);
-            }
-        });
-
-//      init view pager
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        initDatabase();
+        initNavDrawer();
+        initFab();
+        initViewPager();
     }
 
     @Override
@@ -139,4 +88,64 @@ public class HomeActivity extends AppCompatActivity {
         DaoSession daoSession = daoMaster.newSession();
         FoodItemDao foodItemDao = daoSession.getFoodItemDao();
     }
+
+    private void initNavDrawer(){
+        mDrawerLayout = findViewById(R.id.home_activity_drawer_layout);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(0).setChecked(true);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        item.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        Intent intent;
+                        switch (item.getOrder()){
+                            //home
+                            case 0:
+                                //stay on home activity
+                                return true;
+                            //graphs
+                            case 1:
+                                intent = new Intent(getBaseContext(), GraphsActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                return true;
+                            //settings
+                            case 2:
+                                intent = new Intent(getBaseContext(), SettingsActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                return true;
+                            default:
+                                //stay on the activity
+                                return true;
+                        }
+                    }
+                }
+        );
+    }
+
+    private void initFab(){
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), AddItemActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initViewPager(){
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+    }
+
 }

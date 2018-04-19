@@ -20,6 +20,7 @@ public class DataManager {
             DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "items-db", null);
             database = helper.getWritableDb();
             daoSession = new DaoMaster(database).newSession();
+            //daoSession.deleteAll(FoodItem.class);
             foodItems = daoSession.queryBuilder(FoodItem.class).build().list();
         }
     }

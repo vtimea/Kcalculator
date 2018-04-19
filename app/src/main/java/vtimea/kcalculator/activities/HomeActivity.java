@@ -1,5 +1,6 @@
 package vtimea.kcalculator.activities;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,10 +18,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,20 +42,22 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
-    private static Date currentDate;
-    private static Date endDate;
+
+    private static Date currentDate;    //current day's start that the activity is showing 00:00:00
+    private static Date endDate;        //current day's end that the activity is showing 23:59:59
+    private static Calendar calendar;
+
+    private TextView tvDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TODO get current date from date picker
-        Date temp = Calendar.getInstance().getTime();
-        currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate());
-        endDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), 23, 59, 59);
+        tvDate = (TextView) findViewById(R.id.tvDate);
 
         DataManager.initInstance(getApplicationContext());  //init database
+        initTvDate();
         initNavDrawer();
         initFab();
         initViewPager();
@@ -157,23 +162,39 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initTvDate(){
-        //TODO
-        TextView tvDate = (TextView) findViewById(R.id.tvDate);
+        //set date to today
+        Date temp = Calendar.getInstance().getTime();
+        currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate());
+        endDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), 23, 59, 59);
+
+        //datepicker
+        calendar = Calendar.getInstance();
+        tvDate = (TextView) findViewById(R.id.tvDate);
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDates();
+            }
+        };
+
+        //
         tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //TODO
-                
+            public void onClick(View v) {
+                new DatePickerDialog(HomeActivity.this, date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
     }
 
     private void setTvCalories(){
-        int calorieLimit = 1800;
+        int calorieLimit = 1800;    //TODO get calorie limit from settings
 
         List<FoodItem> list = getCurrentItems();
-        Log.i("TIMI", "CURRENT DATE: " + currentDate);
-        Log.i("TIMI", "SIZE: " + list.size());
 
         int sumOfCalories = 0;
         for(int i = 0; i < list.size(); ++i){
@@ -196,6 +217,29 @@ public class HomeActivity extends AppCompatActivity {
         List<FoodItem> list = queryBuilder.list();
 
         return list;
+    }
+
+    //updates: -the tvDate
+    //         -and the tvCalories
+    //when a date has been picker with the date picker
+    private void updateDates() {
+        //update tvDate
+        String myFormat;
+        if(Calendar.getInstance().getTime().getYear() == calendar.getTime().getYear()) {
+            myFormat = "MM/dd";
+        }
+        else {
+            myFormat = "yyyy/MM/dd";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        tvDate.setText(sdf.format(calendar.getTime()));
+
+        //update sumOfCalories
+        Date temp = calendar.getTime();
+        currentDate = new Date(temp.getYear(), temp.getMonth(), temp.getDate(), 0, 0, 0);
+        endDate = new Date(temp.getYear(), temp.getMonth(), temp.getDate(), 23, 59, 59);
+        setTvCalories();
+
     }
 
 }

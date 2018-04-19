@@ -1,7 +1,6 @@
 package vtimea.kcalculator.activities;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -15,13 +14,18 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import vtimea.kcalculator.R;
-import vtimea.kcalculator.data.DaoMaster;
 import vtimea.kcalculator.data.DaoSession;
 import vtimea.kcalculator.data.DataManager;
 import vtimea.kcalculator.data.FoodItem;
@@ -35,16 +39,30 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
+    private static Date currentDate;
+    private static Date endDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DataManager.initInstance(getApplicationContext());
+        //TODO get current date from date picker
+        Date temp = Calendar.getInstance().getTime();
+        currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate());
+        endDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), 23, 59, 59);
+
+        DataManager.initInstance(getApplicationContext());  //init database
         initNavDrawer();
         initFab();
         initViewPager();
+        setTvCalories();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTvCalories();
     }
 
     @Override
@@ -136,6 +154,48 @@ public class HomeActivity extends AppCompatActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+    }
+
+    private void initTvDate(){
+        //TODO
+        TextView tvDate = (TextView) findViewById(R.id.tvDate);
+        tvDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO
+                
+            }
+        });
+    }
+
+    private void setTvCalories(){
+        int calorieLimit = 1800;
+
+        List<FoodItem> list = getCurrentItems();
+        Log.i("TIMI", "CURRENT DATE: " + currentDate);
+        Log.i("TIMI", "SIZE: " + list.size());
+
+        int sumOfCalories = 0;
+        for(int i = 0; i < list.size(); ++i){
+            sumOfCalories += list.get(i).getCals();
+        }
+
+        TextView tvCalories = (TextView) findViewById(R.id.tvCalories);
+        tvCalories.setText(sumOfCalories + "/" + calorieLimit);
+    }
+
+    private void setViewPager(){
+        //TODO
+    }
+
+    private List<FoodItem> getCurrentItems(){
+        DaoSession daoSession = DataManager.getInstance().getDaoSession();
+        FoodItemDao foodItemDao = daoSession.getFoodItemDao();
+        QueryBuilder queryBuilder = foodItemDao.queryBuilder()
+                .where(FoodItemDao.Properties.Date.between(currentDate, endDate));
+        List<FoodItem> list = queryBuilder.list();
+
+        return list;
     }
 
 }

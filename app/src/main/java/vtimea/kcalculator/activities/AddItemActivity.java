@@ -19,11 +19,15 @@ import vtimea.kcalculator.data.FoodItem;
 import vtimea.kcalculator.data.FoodItemDao;
 
 public class AddItemActivity extends AppCompatActivity {
+    private Date currentDate; //TODO get date from HomeActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+
+        Date temp = Calendar.getInstance().getTime();
+        currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), temp.getHours(), temp.getMinutes());
 
         initFabOk();
         initFabCancel();
@@ -39,15 +43,16 @@ public class AddItemActivity extends AppCompatActivity {
                 String etCals = ((EditText) findViewById(R.id.etCals)).getText().toString();
                 int cals = Integer.parseInt(etCals);
 
-                Date date = Calendar.getInstance().getTime();
+                Date temp = Calendar.getInstance().getTime();
+                currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), temp.getHours(), temp.getMinutes());
 
                 String photoId = "?";
 
                 Log.i("TIMI", "Decription: " + description);
                 Log.i("TIMI", "Calories: " + cals);
-                Log.i("TIMI", "Date: " + date);
+                Log.i("TIMI", "Date: " + currentDate);
                 Log.i("TIMI", "PhotoID: " + photoId);
-                addNewItem(description, cals, date, photoId);
+                addNewItem(description, cals, currentDate, photoId);
                 finish();
             }
         });

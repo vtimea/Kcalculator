@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
@@ -16,12 +15,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.MenuItem;
+
+import java.util.Date;
+
 import vtimea.kcalculator.R;
 import vtimea.kcalculator.data.DaoMaster;
 import vtimea.kcalculator.data.DaoSession;
+import vtimea.kcalculator.data.DataManager;
+import vtimea.kcalculator.data.FoodItem;
 import vtimea.kcalculator.data.FoodItemDao;
 import vtimea.kcalculator.fragments.SlideListFragment;
 import vtimea.kcalculator.fragments.SlidePhotosFragment;
@@ -32,14 +35,13 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
-    private SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initDatabase();
+        DataManager.initInstance(getApplicationContext());
         initNavDrawer();
         initFab();
         initViewPager();
@@ -75,18 +77,6 @@ public class HomeActivity extends AppCompatActivity {
         public int getCount() {
             return NUM_OF_PAGES;
         }
-    }
-
-    //Initializes the database and the core greenDAO classes
-    private void initDatabase(){
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "items-db", null);
-        database = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(database);
-
-        //getting hold of dao
-        //don't need this here (yet)
-        DaoSession daoSession = daoMaster.newSession();
-        FoodItemDao foodItemDao = daoSession.getFoodItemDao();
     }
 
     private void initNavDrawer(){

@@ -1,6 +1,7 @@
 package vtimea.kcalculator.activities;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.MenuItem;
 import vtimea.kcalculator.R;
+import vtimea.kcalculator.data.DaoMaster;
+import vtimea.kcalculator.data.DaoSession;
+import vtimea.kcalculator.data.FoodItemDao;
 import vtimea.kcalculator.fragments.SlideListFragment;
 import vtimea.kcalculator.fragments.SlidePhotosFragment;
 
@@ -28,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
+    private SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +130,13 @@ public class HomeActivity extends AppCompatActivity {
 
     //Initializes the database and the core greenDAO classes
     private void initDatabase(){
-        //TODO
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "items-db", null);
+        database = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(database);
+
+        //getting hold of dao
+        //don't need this here (yet)
+        DaoSession daoSession = daoMaster.newSession();
+        FoodItemDao foodItemDao = daoSession.getFoodItemDao();
     }
 }

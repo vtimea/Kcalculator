@@ -122,4 +122,9 @@ public class HomeActivity extends AppCompatActivity {
             return NUM_OF_PAGES;
         }
     }
+
+    //Initializes the database and the core greenDAO classes
+    private void initDatabase(){
+        //TODO
+    }
 }

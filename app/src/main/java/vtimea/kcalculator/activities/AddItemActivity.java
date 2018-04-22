@@ -21,7 +21,7 @@ import vtimea.kcalculator.data.FoodItem;
 import vtimea.kcalculator.data.FoodItemDao;
 
 public class AddItemActivity extends AppCompatActivity {
-    private Date currentDate; //TODO get date from HomeActivity
+    private Date currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,7 @@ public class AddItemActivity extends AppCompatActivity {
     private void initTvDate(Date date){
         TextView tvDate = (TextView) findViewById(R.id.tvAddDate);
         String myFormat;
+        //if the date is the current date
         if(Calendar.getInstance().getTime().getYear() == currentDate.getYear() &&
                 Calendar.getInstance().getTime().getMonth() == currentDate.getMonth() &&
                 Calendar.getInstance().getTime().getDate() == currentDate.getDate()) {

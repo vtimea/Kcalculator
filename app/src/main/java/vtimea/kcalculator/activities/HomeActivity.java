@@ -15,7 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.DatePicker;
@@ -33,7 +32,7 @@ import vtimea.kcalculator.data.DaoSession;
 import vtimea.kcalculator.data.DataManager;
 import vtimea.kcalculator.data.FoodItem;
 import vtimea.kcalculator.data.FoodItemDao;
-import vtimea.kcalculator.fragments.SlideListFragment;
+import vtimea.kcalculator.fragments.SlideRecyclerViewFragment;
 import vtimea.kcalculator.fragments.SlidePhotosFragment;
 
 public class HomeActivity extends AppCompatActivity {
@@ -42,18 +41,18 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
+    private TextView mTvDate;
 
-    private static Date currentDate;    //current day's start that the activity is showing 00:00:00
+    private static Date currentDate;    //current day's start (the day that the activity is showing 00:00:00)
     private static Calendar calendar;
 
-    private TextView tvDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvDate = (TextView) findViewById(R.id.tvDate);
+        mTvDate = (TextView) findViewById(R.id.tvDate);
 
         DataManager.initInstance(getApplicationContext());  //init database
         initTvDate();
@@ -89,8 +88,13 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            if(position == 0)
-                return new SlideListFragment();
+            if(position == 0) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("Date", currentDate.getTime());
+                SlideRecyclerViewFragment slideRecyclerViewFragment = new SlideRecyclerViewFragment();
+                slideRecyclerViewFragment.setArguments(bundle);
+                return slideRecyclerViewFragment;
+            }
             else
                 return new SlidePhotosFragment();
         }
@@ -98,6 +102,11 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return NUM_OF_PAGES;
+        }
+
+        @Override
+        public int getItemPosition(Object o) {
+            return 0;
         }
     }
 
@@ -168,7 +177,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //datepicker
         calendar = Calendar.getInstance();
-        tvDate = (TextView) findViewById(R.id.tvDate);
+        mTvDate = (TextView) findViewById(R.id.tvDate);
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -180,7 +189,7 @@ public class HomeActivity extends AppCompatActivity {
         };
 
         //
-        tvDate.setOnClickListener(new View.OnClickListener() {
+        mTvDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(HomeActivity.this, date, calendar
@@ -218,11 +227,11 @@ public class HomeActivity extends AppCompatActivity {
         return list;
     }
 
-    //updates: -the tvDate
+    //updates: -the mTvDate
     //         -and the tvCalories
     //when a date has been picker with the date picker
     private void updateDates() {
-        //update tvDate
+        //update mTvDate
         String myFormat;
         if(Calendar.getInstance().getTime().getYear() == calendar.getTime().getYear()) {
             myFormat = "MM/dd";
@@ -231,7 +240,7 @@ public class HomeActivity extends AppCompatActivity {
             myFormat = "yyyy/MM/dd";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-        tvDate.setText(sdf.format(calendar.getTime()));
+        mTvDate.setText(sdf.format(calendar.getTime()));
 
         //update sumOfCalories
         Date temp = calendar.getTime();

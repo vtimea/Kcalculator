@@ -78,4 +78,5 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="no_items_to_show">No items to show</string>
 </resources>

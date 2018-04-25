@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import vtimea.kcalculator.R;
 import vtimea.kcalculator.adapters.RecyclerViewAdapter;
@@ -31,7 +32,12 @@ public class SlideRecyclerViewFragment extends Fragment {
         RecyclerViewAdapter viewAdapter = new RecyclerViewAdapter(date);
         mRecyclerView.setAdapter(viewAdapter);
 
-        Log.i("REC", "Recycler view created.");
+        TextView textView = rootView.findViewById(R.id.tvRVNoItems);
+        if(mRecyclerView.getAdapter().getItemCount() == 0){
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.INVISIBLE);
+        }
 
         return rootView;
     }

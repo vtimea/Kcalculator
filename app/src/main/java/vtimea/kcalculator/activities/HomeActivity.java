@@ -66,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         setTvCalories();
+        updatePager();
     }
 
     @Override
@@ -82,6 +83,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        SlideRecyclerViewFragment recyclerViewFragment;
+        SlidePhotosFragment slidePhotosFragment;
+
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -91,12 +95,14 @@ public class HomeActivity extends AppCompatActivity {
             if(position == 0) {
                 Bundle bundle = new Bundle();
                 bundle.putLong("Date", currentDate.getTime());
-                SlideRecyclerViewFragment slideRecyclerViewFragment = new SlideRecyclerViewFragment();
-                slideRecyclerViewFragment.setArguments(bundle);
-                return slideRecyclerViewFragment;
+                recyclerViewFragment = new SlideRecyclerViewFragment();
+                recyclerViewFragment.setArguments(bundle);
+                return recyclerViewFragment;
             }
-            else
-                return new SlidePhotosFragment();
+            else {
+                slidePhotosFragment = new SlidePhotosFragment();
+                return slidePhotosFragment;
+            }
         }
 
         @Override
@@ -185,6 +191,7 @@ public class HomeActivity extends AppCompatActivity {
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateDates();
+                updatePager();
             }
         };
 
@@ -211,10 +218,6 @@ public class HomeActivity extends AppCompatActivity {
 
         TextView tvCalories = (TextView) findViewById(R.id.tvCalories);
         tvCalories.setText(sumOfCalories + "/" + calorieLimit);
-    }
-
-    private void setViewPager(){
-        //TODO
     }
 
     private List<FoodItem> getCurrentItems(){
@@ -248,4 +251,9 @@ public class HomeActivity extends AppCompatActivity {
         setTvCalories();
     }
 
+    public void updatePager(){
+        //TODO find a better solution than this
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+    }
 }

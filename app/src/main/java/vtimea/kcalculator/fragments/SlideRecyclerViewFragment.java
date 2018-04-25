@@ -14,7 +14,6 @@ import vtimea.kcalculator.adapters.RecyclerViewAdapter;
 
 public class SlideRecyclerViewFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
 
 
     @Override

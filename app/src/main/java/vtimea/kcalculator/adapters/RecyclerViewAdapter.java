@@ -73,5 +73,4 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         return list;
     }
-
 }

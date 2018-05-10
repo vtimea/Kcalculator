@@ -14,12 +14,50 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="No settings yet" />
+            android:layout_marginLeft="@dimen/tvdate_margin_left"
+            android:layout_marginTop="@dimen/tvdate_margin_top"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="App settings"/>
+
+        <TextView
+            android:id="@+id/tvSettingsCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_alignLeft="@+id/tvDate"
+            android:layout_alignStart="@+id/tvDate"
+            android:layout_below="@+id/tvDate"
+            android:layout_marginTop="31dp"
+            android:text="Calories:" />
+
+        <EditText
+            android:id="@+id/etSettingsCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tvSettingsCalories"
+            android:layout_alignBottom="@+id/tvSettingsCalories"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:ems="10"
+            android:inputType="number"
+            android:text="2000" />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_alignLeft="@+id/tvSettingsCalories"
+            android:layout_alignStart="@+id/tvSettingsCalories"
+            android:layout_below="@+id/etSettingsCalories"
+            android:layout_marginTop="36dp"
+            android:text="Calculate automatically." />
+
     </android.widget.RelativeLayout>
 
     <!-- content of the drawer -->

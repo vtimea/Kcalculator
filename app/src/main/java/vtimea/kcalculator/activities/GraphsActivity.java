@@ -1,29 +1,75 @@
 package vtimea.kcalculator.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Spinner;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import org.greenrobot.greendao.query.QueryBuilder;
+
+import java.nio.channels.CancelledKeyException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import vtimea.kcalculator.R;
+import vtimea.kcalculator.data.DaoSession;
+import vtimea.kcalculator.data.DataManager;
+import vtimea.kcalculator.data.FoodItem;
+import vtimea.kcalculator.data.FoodItemDao;
 
 public class GraphsActivity extends AppCompatActivity {
+    private final int NUM_OF_DAYS_WEEK = 7;
+    private final int NUM_OF_DAYS_MONTH = 30;
 
     private DrawerLayout mDrawerLayout;
+    private LineChart chart;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphs);
-
         mDrawerLayout = findViewById(R.id.home_activity_drawer_layout);
+        chart = (LineChart) findViewById(R.id.chart);
+        spinner = (Spinner) findViewById(R.id.spGraph);
 
-//        init navigation drawer
+        initNavDrawer();
+        drawGraph();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if(mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    mDrawerLayout.closeDrawers();
+                else
+                    mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initNavDrawer(){
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
@@ -63,16 +109,69 @@ public class GraphsActivity extends AppCompatActivity {
         );
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if(mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    mDrawerLayout.closeDrawers();
-                else
-                    mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+    private void drawGraph(){
+        List<Integer> items = getLastDaysData(NUM_OF_DAYS_WEEK);
+
+        //Convert the items into entries
+        List<Entry> entries = new ArrayList<Entry>();
+        for(int i = 0; i < items.size(); ++i){
+            entries.add(new Entry(i*250, items.get(i)));
         }
-        return super.onOptionsItemSelected(item);
+        LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
+
+        //Styling the chart
+        dataSet.setColors(Color.BLUE);
+        dataSet.setValueTextColor(Color.BLACK);
+        chart.getXAxis().setDrawLabels(false);
+        chart.getXAxis().setDrawGridLines(false);
+        chart.getAxisRight().setDrawLabels(false);
+        chart.getDescription().setEnabled(false);
+        chart.getLegend().setEnabled(false);
+
+        //Set data
+        LineData lineData = new LineData(dataSet);
+        chart.setData(lineData);
+        chart.getData().setHighlightEnabled(false);
+        chart.invalidate(); // refresh
+    }
+
+    @Nullable
+    private ArrayList<Integer> getLastDaysData(int numberOfDays){
+        if(numberOfDays <= 0)
+            return null;
+
+        //calculate the two dates
+        Calendar cal = Calendar.getInstance();
+
+        Date temp = cal.getTime();
+        Date currentDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), 23, 59, 0);
+
+        cal.add(Calendar.DATE, numberOfDays*-1);
+        temp = cal.getTime();
+        Date lastDate = new Date(temp.getYear(), temp.getMonth(),  temp.getDate(), 0, 0, 0);
+
+        //get data from database and add up the calories for each day
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int i = 0; i < numberOfDays; ++i){
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, -1*i);
+            Date date = calendar.getTime();
+            Date curr = new Date(date.getYear(), date.getMonth(),  date.getDate(), 0, 0, 0);
+
+            DaoSession daoSession = DataManager.getInstance().getDaoSession();
+            FoodItemDao foodItemDao = daoSession.getFoodItemDao();
+            QueryBuilder queryBuilder = foodItemDao.queryBuilder()
+                   .where(FoodItemDao.Properties.Date.eq(curr));
+            List<FoodItem> items = queryBuilder.list();
+
+            int sum = 0;
+            for(FoodItem f : items){
+                sum += f.getCals();
+            }
+            list.add(sum);
+        }
+
+        Collections.reverse(list);  //so its in ascending order (days)
+        return list;    //returns the sum of the items for each day
     }
 }

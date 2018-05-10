@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -36,7 +39,7 @@ import vtimea.kcalculator.data.DataManager;
 import vtimea.kcalculator.data.FoodItem;
 import vtimea.kcalculator.data.FoodItemDao;
 
-public class GraphsActivity extends AppCompatActivity {
+public class GraphsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private final int NUM_OF_DAYS_WEEK = 7;
     private final int NUM_OF_DAYS_MONTH = 30;
 
@@ -51,9 +54,11 @@ public class GraphsActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.home_activity_drawer_layout);
         chart = (LineChart) findViewById(R.id.chart);
         spinner = (Spinner) findViewById(R.id.spGraph);
+        spinner.setOnItemSelectedListener(this);
 
         initNavDrawer();
-        drawGraph();
+        initSpinner();
+        drawGraph(NUM_OF_DAYS_MONTH);
     }
 
     @Override
@@ -109,8 +114,18 @@ public class GraphsActivity extends AppCompatActivity {
         );
     }
 
-    private void drawGraph(){
-        List<Integer> items = getLastDaysData(NUM_OF_DAYS_WEEK);
+    private void initSpinner(){
+        List<String> categories = new ArrayList<String>();
+        categories.add(getString(R.string.spLast30));
+        categories.add(getString(R.string.spLast7));
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+    }
+
+    private void drawGraph(int days){
+        List<Integer> items = getLastDaysData(days);
 
         //Convert the items into entries
         List<Entry> entries = new ArrayList<Entry>();
@@ -173,5 +188,21 @@ public class GraphsActivity extends AppCompatActivity {
 
         Collections.reverse(list);  //so its in ascending order (days)
         return list;    //returns the sum of the items for each day
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if(i == 0) {
+            drawGraph(NUM_OF_DAYS_MONTH);
+        }
+        else {
+            drawGraph(NUM_OF_DAYS_WEEK);
+        }
+        Log.i("TIMI", "Index: " + i);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        //TODO
     }
 }

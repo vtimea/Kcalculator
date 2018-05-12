@@ -198,7 +198,6 @@ public class GraphsActivity extends AppCompatActivity implements AdapterView.OnI
         else {
             drawGraph(NUM_OF_DAYS_WEEK);
         }
-        Log.i("TIMI", "Index: " + i);
     }
 
     @Override

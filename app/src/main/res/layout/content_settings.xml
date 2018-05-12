@@ -48,15 +48,15 @@
             android:text="2000" />
 
         <Switch
-            android:id="@+id/switch1"
-            android:layout_width="match_parent"
+            android:id="@+id/swCalcAuto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
             android:layout_alignLeft="@+id/tvSettingsCalories"
             android:layout_alignStart="@+id/tvSettingsCalories"
             android:layout_below="@+id/etSettingsCalories"
-            android:layout_marginTop="36dp"
-            android:text="Calculate automatically." />
+            android:layout_marginTop="33dp"
+            android:textSize="20sp"
+            android:text="@string/calculate_automatically" />
 
     </android.widget.RelativeLayout>
 
@@ -67,5 +67,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/drawer_view"/>
+        app:menu="@menu/drawer_view">
+
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

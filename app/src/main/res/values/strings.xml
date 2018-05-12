@@ -81,4 +81,9 @@
     <string name="no_items_to_show">No items to show</string>
     <string name="spLast30">Last 30 days</string>
     <string name="spLast7">Last 7 days</string>
+    <string name="gender">Gender:</string>
+    <string name="height">Height:</string>
+    <string name="weight">Weight:</string>
+    <string name="activity_level">Activity level:</string>
+    <string name="calculate_automatically">Calculate automatically:</string>
 </resources>

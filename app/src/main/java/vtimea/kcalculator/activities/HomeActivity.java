@@ -207,7 +207,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setTvCalories(){
-        int calorieLimit = 1800;    //TODO get calorie limit from settings
+        int calorieLimit = SettingsActivity.getCaloriesFromPrefs(this);    //TODO get calorie limit from settings
 
         List<FoodItem> list = getCurrentItems();
 
@@ -256,5 +256,6 @@ public class HomeActivity extends AppCompatActivity {
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
     }
+
 
 }

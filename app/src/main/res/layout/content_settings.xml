@@ -47,15 +47,16 @@
             android:inputType="number"
             android:text="2000" />
 
-        <Switch
-            android:id="@+id/swCalcAuto"
+        <Button
+            android:id="@+id/btnCalcAuto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tvSettingsCalories"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_alignStart="@+id/tvSettingsCalories"
             android:layout_below="@+id/etSettingsCalories"
-            android:layout_marginTop="33dp"
-            android:textSize="20sp"
+            android:layout_marginTop="34dp"
             android:text="@string/calculate_automatically" />
 
     </android.widget.RelativeLayout>
@@ -65,6 +66,9 @@
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_view">

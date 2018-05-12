@@ -19,7 +19,9 @@
         android:layout_width="136dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp"
+        android:drawSelectorOnTop="true"
+        android:entries="@array/genders"/>
 
     <TextView
         android:id="@+id/tvHeight"
@@ -78,6 +80,8 @@
         android:id="@+id/spActivityLevel"
         android:layout_width="159dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp"
+        android:drawSelectorOnTop="true"
+        android:entries="@array/activity_levels"/>
 
 </android.widget.GridLayout>

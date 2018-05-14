@@ -256,7 +256,8 @@ public class HomeActivity extends AppCompatActivity {
 
     public void updatePager(){
         //TODO find a better solution than this
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        //mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.invalidate();
         mPager.setAdapter(mPagerAdapter);
     }
 

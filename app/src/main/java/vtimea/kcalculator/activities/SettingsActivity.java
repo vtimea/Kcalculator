@@ -34,6 +34,7 @@ import vtimea.kcalculator.R;
 
 public class SettingsActivity extends AppCompatActivity {
     static private final String PREF_CALS = "Calories";
+    static private final int DEFAULT_CALORIES = 2000;
 
     private DrawerLayout mDrawerLayout;
     private TextView etCals;
@@ -193,7 +194,7 @@ public class SettingsActivity extends AppCompatActivity {
         //if the user previously saved a calorie intake then show that, else show 2000
         int calories = getCaloriesFromPrefs(this);
         if(calories < 0) {
-            etCals.setText("2000");
+            etCals.setText(DEFAULT_CALORIES);
         }
         else{
             etCals.setText(Integer.toString(calories));
@@ -246,7 +247,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     static int getCaloriesFromPrefs(Context context){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int calories = preferences.getInt(PREF_CALS, -1);
+        int calories = preferences.getInt(PREF_CALS, DEFAULT_CALORIES);
         return calories;
     }
 

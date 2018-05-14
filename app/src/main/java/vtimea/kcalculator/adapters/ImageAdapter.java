@@ -3,15 +3,18 @@ package vtimea.kcalculator.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -21,19 +24,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import vtimea.kcalculator.activities.HomeActivity;
 import vtimea.kcalculator.data.DaoSession;
 import vtimea.kcalculator.data.DataManager;
 import vtimea.kcalculator.data.FoodItem;
 import vtimea.kcalculator.data.FoodItemDao;
+import vtimea.kcalculator.fragments.SlidePhotosFragment;
 
 public class ImageAdapter extends BaseAdapter{
     private Date currentDate;
     private Context mContext;
-    private int photo_size;
-    private List<FoodItem> items;
-    private List<Bitmap> photos;
+    private GridView gridView;
+    private static List<FoodItem> items = new ArrayList<>();
+    private static List<Bitmap> photos = new ArrayList<>();
 
-    public ImageAdapter(Context c, long date) {
+    public ImageAdapter(Context c, long date, GridView gridView) {
+        this.gridView = gridView;
         mContext = c;
         currentDate = new Date(date);
         items = getCurrentItems();
@@ -57,22 +63,23 @@ public class ImageAdapter extends BaseAdapter{
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Log.i("PERFORMLOG", "---> getView <---");
         ImageView imageView;
-        if (!(view instanceof ImageView)) {
+        if (view == null) {
             imageView = new ImageView(mContext);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else {
+            Log.i("PERFORMLOG", "---> CACHE <---");
             imageView = (ImageView) view;
         }
 
-        imageView.setImageBitmap(photos.get(i));
+        Log.i("PERFORMLOG", "---> NEM CACHE <---");
+        if(photos.size()-1 >= i)
+            imageView.setImageBitmap(photos.get(i));
 
         return imageView;
     }
 
     //loading photos
-    //TODO needs to be faster
     private void initPhotos(){
         photos = new ArrayList<>();
         for(FoodItem f : items){
@@ -97,5 +104,9 @@ public class ImageAdapter extends BaseAdapter{
         }
 
         return list;
+    }
+
+    public boolean isEmpty(){
+        return photos.size() == 0 ? true : false;
     }
 }

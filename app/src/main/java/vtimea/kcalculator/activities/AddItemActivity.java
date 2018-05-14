@@ -31,8 +31,7 @@ public class AddItemActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
 
     private Date currentDate;
-    private String mCurrentPhotoPath;
-    private String currentFileName = "";
+    private String mCurrentPhotoPath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,10 +153,7 @@ public class AddItemActivity extends AppCompatActivity {
                 storageDir      /* directory */
         );
 
-        currentFileName = image.getName();
         mCurrentPhotoPath = image.getAbsolutePath();
-        Log.i("AddItemActivityLOG", "Filename: " + currentFileName);
-        Log.i("AddItemActivityLOG", "Photo path: " + mCurrentPhotoPath);
         return image;
     }
 }

@@ -15,6 +15,7 @@
         android:weightSum="5">
 
         <RelativeLayout
+            android:id="@+id/relBackground"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2">

@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -133,6 +134,7 @@ public class GraphsActivity extends AppCompatActivity implements AdapterView.OnI
             entries.add(new Entry(i*250, items.get(i)));
         }
         LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
+        dataSet.setValueTextSize(10);
 
         //Styling the chart
         dataSet.setColors(Color.BLUE);
@@ -140,7 +142,11 @@ public class GraphsActivity extends AppCompatActivity implements AdapterView.OnI
         chart.getXAxis().setDrawLabels(false);
         chart.getXAxis().setDrawGridLines(false);
         chart.getAxisRight().setDrawLabels(false);
-        chart.getDescription().setEnabled(false);
+        chart.getDescription().setEnabled(true);
+        Description description = new Description();
+        description.setText("Average calorie intake: " + Integer.toString(average(items)));
+        description.setTextSize(14);
+        chart.setDescription(description);
         chart.getLegend().setEnabled(false);
 
         //Set data
@@ -188,6 +194,14 @@ public class GraphsActivity extends AppCompatActivity implements AdapterView.OnI
 
         Collections.reverse(list);  //so its in ascending order (days)
         return list;    //returns the sum of the items for each day
+    }
+
+    private int average(List<Integer> list){
+        int sum = 0;
+        for(Integer i : list){
+            sum += i;
+        }
+        return sum/list.size();
     }
 
     @Override

@@ -2,6 +2,7 @@ package vtimea.kcalculator.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.DatePicker;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -43,6 +45,8 @@ public class HomeActivity extends AppCompatActivity {
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
     private TextView mTvDate;
+    private TextView mTvCals;
+    private RelativeLayout mRelativeLayout;
 
     private static Date currentDate;    //current day's start (the day that the activity is showing 00:00:00)
     private static Calendar calendar;
@@ -54,6 +58,10 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mTvDate = (TextView) findViewById(R.id.tvDate);
+        mTvCals = (TextView) findViewById(R.id.tvCalories);
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mRelativeLayout = findViewById(R.id.relBackground);
+        mDrawerLayout = findViewById(R.id.home_activity_drawer_layout);
 
         DataManager.initInstance(getApplicationContext());  //init database
         initTvDate();
@@ -119,8 +127,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initNavDrawer(){
-        mDrawerLayout = findViewById(R.id.home_activity_drawer_layout);
-
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
@@ -173,7 +179,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initViewPager(){
-        mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setOffscreenPageLimit(1);
@@ -210,7 +215,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setTvCalories(){
-        int calorieLimit = SettingsActivity.getCaloriesFromPrefs(this);    //TODO get calorie limit from settings
+        int calorieLimit = SettingsActivity.getCaloriesFromPrefs(this);
 
         List<FoodItem> list = getCurrentItems();
 
@@ -221,6 +226,18 @@ public class HomeActivity extends AppCompatActivity {
 
         TextView tvCalories = (TextView) findViewById(R.id.tvCalories);
         tvCalories.setText(sumOfCalories + "/" + calorieLimit);
+
+        //setting colors
+        if(sumOfCalories > calorieLimit){
+            mRelativeLayout.setBackgroundColor(getResources().getColor(R.color.red));
+            mTvCals.setTextColor(getResources().getColor(R.color.white));
+            mTvDate.setTextColor(getResources().getColor(R.color.white));
+        }
+        else {
+            mRelativeLayout.setBackgroundColor(getResources().getColor(R.color.green));
+            mTvCals.setTextColor(getResources().getColor(R.color.def_color));
+            mTvDate.setTextColor(getResources().getColor(R.color.def_color));
+        }
     }
 
     private List<FoodItem> getCurrentItems(){

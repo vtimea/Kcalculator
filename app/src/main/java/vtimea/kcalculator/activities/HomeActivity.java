@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.DatePicker;
@@ -92,15 +93,16 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            Bundle bundle = new Bundle();
+            bundle.putLong("Date", currentDate.getTime());
             if(position == 0) {
-                Bundle bundle = new Bundle();
-                bundle.putLong("Date", currentDate.getTime());
                 recyclerViewFragment = new SlideRecyclerViewFragment();
                 recyclerViewFragment.setArguments(bundle);
                 return recyclerViewFragment;
             }
             else {
                 slidePhotosFragment = new SlidePhotosFragment();
+                slidePhotosFragment.setArguments(bundle);
                 return slidePhotosFragment;
             }
         }
@@ -174,6 +176,7 @@ public class HomeActivity extends AppCompatActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+        mPager.setOffscreenPageLimit(1);
     }
 
     private void initTvDate(){

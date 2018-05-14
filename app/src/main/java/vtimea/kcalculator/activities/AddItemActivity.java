@@ -69,7 +69,7 @@ public class AddItemActivity extends AppCompatActivity {
                     etCals.setError("Please enter a valid number!");
                     return;
                 }
-                String photoId = currentFileName;
+                String photoId = mCurrentPhotoPath;
 
                 addNewItem(description, cals, currentDate, photoId);
                 finish();

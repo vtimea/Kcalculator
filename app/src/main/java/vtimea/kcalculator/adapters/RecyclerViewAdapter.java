@@ -33,14 +33,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tvItemName = (TextView) itemView.findViewById(R.id.tvItemName);
             tvItemCals = (TextView) itemView.findViewById(R.id.tvItemCals);
             view = itemView;
-
-            Log.i("REC", "View holder konstruktor!");
         }
     }
 
     public RecyclerViewAdapter(long date){
         currentDate = new Date(date);
-        Log.i("REC", "RecyclerViewAdapter konstruktor - Date: " + currentDate.toString());
     }
 
     @Override
@@ -54,13 +51,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvItemName.setText(getCurrentItems().get(position).getDescription());
         holder.tvItemCals.setText(new Integer(getCurrentItems().get(position).getCals()).toString());
-        Log.i("REC", "onBindViewHolder - Name: " + holder.tvItemName.getText().toString());
-        Log.i("REC", "onBindViewHolder - Cals: " + holder.tvItemCals.getText().toString());
     }
 
     @Override
     public int getItemCount() {
-        Log.i("REC", "ItemCount: " + getCurrentItems().size());
         return getCurrentItems().size();
     }
 

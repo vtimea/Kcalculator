@@ -39,6 +39,8 @@
         android:layout_alignStart="@+id/etDesc"
         android:layout_below="@+id/etDesc"
         android:layout_marginTop="11dp"
+        android:layout_toLeftOf="@+id/fabCancel"
+        android:layout_toStartOf="@+id/fabCancel"
         android:ems="10"
         android:inputType="number" />
 

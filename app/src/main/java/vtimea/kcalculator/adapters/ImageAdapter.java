@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -83,8 +84,13 @@ public class ImageAdapter extends BaseAdapter{
         for(FoodItem f : items){
             FoodItem foodItem = f;
             Uri uri = Uri.fromFile(new File(foodItem.getPhotoId()));
-            Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(uri.getPath()), 450, 450);
+            Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
+            if(bitmap == null)
+                continue;
+
+            Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(bitmap, 450, 450);
             photos.add(ThumbImage);
+
         }
     }
 
@@ -93,14 +99,8 @@ public class ImageAdapter extends BaseAdapter{
         DaoSession daoSession = DataManager.getInstance().getDaoSession();
         FoodItemDao foodItemDao = daoSession.getFoodItemDao();
         QueryBuilder queryBuilder = foodItemDao.queryBuilder()
-                .where(FoodItemDao.Properties.Date.eq(currentDate));
+                .where(FoodItemDao.Properties.Date.eq(currentDate), FoodItemDao.Properties.PhotoId.notEq(""));
         List<FoodItem> list = queryBuilder.list();
-        for(FoodItem f : list){
-            if(f.getPhotoId() == "") {
-                list.remove(f);
-            }
-        }
-
         return list;
     }
 

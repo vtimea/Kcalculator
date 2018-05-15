@@ -37,6 +37,7 @@ public class AddItemActivity extends AppCompatActivity {
     private ImageView imageView;
     private Date currentDate;
     private String mCurrentPhotoPath = "";
+    private String mOldPhotoPath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +61,15 @@ public class AddItemActivity extends AppCompatActivity {
         if(requestCode == REQUEST_TAKE_PHOTO){
             if(resultCode == AddItemActivity.RESULT_OK){
                 Log.i("LOG", "RESULT OK!");
+                deleteImageFile(mOldPhotoPath);
+                mOldPhotoPath = "";
                 Uri uri = Uri.fromFile(new File(mCurrentPhotoPath));
                 Bitmap thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(uri.getPath()), 450, 450);
                 imageView.setImageBitmap(thumbnail);
+            }
+            if(resultCode == AddItemActivity.RESULT_CANCELED){
+                mCurrentPhotoPath = mOldPhotoPath;
+                mOldPhotoPath = "";
             }
         }
     }
@@ -171,7 +178,28 @@ public class AddItemActivity extends AppCompatActivity {
                 storageDir      /* directory */
         );
 
-        mCurrentPhotoPath = image.getAbsolutePath();
+        if(!mCurrentPhotoPath.equals("")){
+            mOldPhotoPath = mCurrentPhotoPath;
+            mCurrentPhotoPath = image.getAbsolutePath();
+        }
+        else {
+            mCurrentPhotoPath = image.getAbsolutePath();
+        }
         return image;
+    }
+
+    private boolean deleteImageFile(String path){
+        File f = new File(path);
+        if(f.exists()){
+            if(f.delete()){
+                Log.i("LOG", "File deleted: " + path);
+                return true;
+            }
+            else{
+                Log.i("LOG", "Couldn't delete file: " + path);
+                return false;
+            }
+        }
+        return false;
     }
 }

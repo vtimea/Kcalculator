@@ -3,14 +3,8 @@ package vtimea.kcalculator.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,17 +14,14 @@ import android.widget.ImageView;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import vtimea.kcalculator.activities.HomeActivity;
 import vtimea.kcalculator.data.DaoSession;
 import vtimea.kcalculator.data.DataManager;
 import vtimea.kcalculator.data.FoodItem;
 import vtimea.kcalculator.data.FoodItemDao;
-import vtimea.kcalculator.fragments.SlidePhotosFragment;
 
 public class ImageAdapter extends BaseAdapter{
     private Date currentDate;
@@ -83,7 +74,7 @@ public class ImageAdapter extends BaseAdapter{
         photos = new ArrayList<>();
         for(FoodItem f : items){
             FoodItem foodItem = f;
-            Uri uri = Uri.fromFile(new File(foodItem.getPhotoId()));
+            Uri uri = Uri.fromFile(new File(foodItem.getPhotoLocation()));
             Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
             if(bitmap == null)
                 continue;
@@ -94,7 +85,7 @@ public class ImageAdapter extends BaseAdapter{
         }
     }
 
-    //returns a list of items that has photos
+    //returns the items that have a photo
     private List<FoodItem> getCurrentItems(){
         DaoSession daoSession = DataManager.getInstance().getDaoSession();
         FoodItemDao foodItemDao = daoSession.getFoodItemDao();

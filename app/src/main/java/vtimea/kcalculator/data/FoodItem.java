@@ -20,16 +20,16 @@ public class FoodItem {
     @NotNull
     private Date date;  //date of consumption
 
-    private String photoId; //id of the photo which is attached to the food (if there's one)
+    private String photoLocation; //id of the photo which is attached to the food (if there's one)
 
     @Generated(hash = 927387693)
     public FoodItem(Long id, String description, int cals, @NotNull Date date,
-            String photoId) {
+            String photoLocation) {
         this.id = id;
         this.description = description;
         this.cals = cals;
         this.date = date;
-        this.photoId = photoId;
+        this.photoLocation = photoLocation;
     }
     @Generated(hash = 502595677)
     public FoodItem() {
@@ -44,6 +44,6 @@ public class FoodItem {
     public void setCals(int cals){ this.cals = cals; }
     public Date getDate(){ return date; }
     public void setDate(Date date){ this.date = date; }
-    public String getPhotoId(){ return photoId; }
-    public void setPhotoId(String photoId){ this.photoId = photoId; }
+    public String getPhotoLocation(){ return photoLocation; }
+    public void setPhotoLocation(String photoLocation){ this.photoLocation = photoLocation; }
 }

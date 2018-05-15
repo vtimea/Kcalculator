@@ -55,7 +55,7 @@ public class SlidePhotosFragment extends Fragment {
 
         //
         loadingText = (TextView) rootView.findViewById(R.id.tvLoading);
-        loadingText.setText("Loading photos...");
+        loadingText.setText(R.string.loading_message_photos);
         loadingText.setVisibility(View.VISIBLE);
         this.gridView = gridview;
         this.date = date;

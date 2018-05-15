@@ -11,7 +11,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +32,7 @@ import vtimea.kcalculator.data.FoodItemDao;
 
 public class AddItemActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
+    static final int PHOTO_SIZE = 450;
 
     private ImageView imageView;
     private Date currentDate;
@@ -46,9 +46,9 @@ public class AddItemActivity extends AppCompatActivity {
         imageView = findViewById(R.id.ivPreview);
 
         //set date
-        Date temp = Calendar.getInstance().getTime();
-        temp = new Date(1997, temp.getMonth(),  temp.getDate(), 0, 0, 0);
-        currentDate = new Date(getIntent().getLongExtra("Date", temp.getTime()));
+        Date defDate = Calendar.getInstance().getTime();
+        defDate = new Date(defDate.getYear(), defDate.getMonth(),  defDate.getDate(), 0, 0, 0); //default value
+        currentDate = new Date(getIntent().getLongExtra("Date", defDate.getTime()));
         initTvDate(currentDate);
 
         initFabOk();
@@ -60,11 +60,10 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == REQUEST_TAKE_PHOTO){
             if(resultCode == AddItemActivity.RESULT_OK){
-                Log.i("LOG", "RESULT OK!");
                 deleteImageFile(mOldPhotoPath);
                 mOldPhotoPath = "";
                 Uri uri = Uri.fromFile(new File(mCurrentPhotoPath));
-                Bitmap thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(uri.getPath()), 450, 450);
+                Bitmap thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(uri.getPath()), PHOTO_SIZE, PHOTO_SIZE);
                 imageView.setImageBitmap(thumbnail);
             }
             if(resultCode == AddItemActivity.RESULT_CANCELED){
@@ -118,7 +117,7 @@ public class AddItemActivity extends AppCompatActivity {
         if(Calendar.getInstance().getTime().getYear() == currentDate.getYear() &&
                 Calendar.getInstance().getTime().getMonth() == currentDate.getMonth() &&
                 Calendar.getInstance().getTime().getDate() == currentDate.getDate()) {
-            tvDate.setText("Today");
+            tvDate.setText(R.string.today);
         }
         else {
             myFormat = "yyyy/MM/dd";
@@ -139,7 +138,6 @@ public class AddItemActivity extends AppCompatActivity {
                     try {
                         photoFile = createImageFile();
                     } catch (IOException ex) {
-                        Log.e("AddItemActivityLOG", "IOException");
                         Toast.makeText(getBaseContext(), "There was an error while opening the camera app!", Toast.LENGTH_LONG);
                     }
                     if (photoFile != null) {
@@ -154,6 +152,7 @@ public class AddItemActivity extends AppCompatActivity {
         });
     }
 
+    //insert item with the given params to the db
     private Long addNewItem(String description, int cals, Date date, String photoId){
         DaoSession daoSession = DataManager.getInstance().getDaoSession();
         FoodItemDao foodItemDao = daoSession.getFoodItemDao();
@@ -162,7 +161,7 @@ public class AddItemActivity extends AppCompatActivity {
         item.setDescription(description);
         item.setCals(cals);
         item.setDate(date);
-        item.setPhotoId(photoId);
+        item.setPhotoLocation(photoId);
 
         foodItemDao.insert(item);
         return item.getId();
@@ -178,6 +177,9 @@ public class AddItemActivity extends AppCompatActivity {
                 storageDir      /* directory */
         );
 
+        //if the user had taken a photo earlier
+        //save the location of it
+        //because we may need to delete that later
         if(!mCurrentPhotoPath.equals("")){
             mOldPhotoPath = mCurrentPhotoPath;
             mCurrentPhotoPath = image.getAbsolutePath();
@@ -192,11 +194,9 @@ public class AddItemActivity extends AppCompatActivity {
         File f = new File(path);
         if(f.exists()){
             if(f.delete()){
-                Log.i("LOG", "File deleted: " + path);
                 return true;
             }
             else{
-                Log.i("LOG", "Couldn't delete file: " + path);
                 return false;
             }
         }

@@ -16,20 +16,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import vtimea.kcalculator.R;
 
@@ -150,42 +143,13 @@ public class SettingsActivity extends AppCompatActivity {
                 //CANCEL
                 alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which){
-                        //cancel
-                    }
+                    public void onClick(DialogInterface dialog, int which){}
                 });
 
                 //OK
                 alert.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //getting the numbers from the edittexts
-//                        int height = Integer.parseInt(etHeight.getText().toString());
-//                        int weight = Integer.parseInt(etWeight.getText().toString());
-//                        int age = Integer.parseInt(etAge.getText().toString());
-//                        boolean isMale = spGender.getSelectedItemPosition() == 0;
-//                        ActivityLevel activityLevel;
-//                        switch (spActivity.getSelectedItemPosition()){
-//                            case 0:
-//                                activityLevel = ActivityLevel.SEDENTARY;
-//                                break;
-//                            case 1:
-//                                activityLevel = ActivityLevel.MODERATELY_ACTIVE;
-//                                break;
-//                            case 2:
-//                                activityLevel = ActivityLevel.ACTIVE;
-//                                break;
-//                            default:
-//                                activityLevel = ActivityLevel.SEDENTARY;
-//                                break;
-//                        }
-//
-//                        //calculate and save calories
-//                        int calories = calculateCalories(isMale, height, weight, age, activityLevel);
-//                        saveCaloresToPrefs(calories);
-//                        etCals.setText(Integer.toString(calories));
-//                        etCals.clearFocus();
-                    }
+                    public void onClick(DialogInterface dialog, int which) {}
                 });
 
                 //show dialog
@@ -225,7 +189,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if(etCals.getText().toString().equals(""))
                     return;
                 int calories = Integer.parseInt(etCals.getText().toString());
-                saveCaloresToPrefs(calories);
+                saveCaloriesToPrefs(calories);
             }
         });
     }
@@ -246,7 +210,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void saveCaloresToPrefs(int calories){
+    private void saveCaloriesToPrefs(int calories){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(PREF_CALS);
@@ -295,7 +259,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 //calculate and save calories
                 int calories = calculateCalories(isMale, height, weight, age, activityLevel);
-                saveCaloresToPrefs(calories);
+                saveCaloriesToPrefs(calories);
                 etCals.setText(Integer.toString(calories));
                 etCals.clearFocus();
 

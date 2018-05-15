@@ -26,6 +26,9 @@
     <string name="activity_title_add_item">Add a new item</string>
     <string name="activity_title_graphs">Graphs</string>
     <string name="activity_title_settings">Settings</string>
+    <string name="today">Today</string>
+    <string name="graph_description">Average calorie intake:</string>
+    <string name="loading_message_photos">Loading photos...</string>
 
     <string-array name="genders">
         <item>Male</item>

@@ -144,7 +144,7 @@ public class GraphsActivity extends AppCompatActivity implements AdapterView.OnI
         chart.getAxisRight().setDrawLabels(false);
         chart.getDescription().setEnabled(true);
         Description description = new Description();
-        description.setText("Average calorie intake: " + Integer.toString(average(items)));
+        description.setText(getString(R.string.graph_description) + Integer.toString(average(items)));
         description.setTextSize(14);
         chart.setDescription(description);
         chart.getLegend().setEnabled(false);
@@ -216,6 +216,6 @@ public class GraphsActivity extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        //TODO
+        //do nothing
     }
 }

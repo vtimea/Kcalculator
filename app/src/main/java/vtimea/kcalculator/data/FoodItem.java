@@ -22,9 +22,8 @@ public class FoodItem {
 
     private String photoLocation; //id of the photo which is attached to the food (if there's one)
 
-    @Generated(hash = 927387693)
-    public FoodItem(Long id, String description, int cals, @NotNull Date date,
-            String photoLocation) {
+    @Generated(hash = 1225716941)
+    public FoodItem(Long id, String description, int cals, @NotNull Date date, String photoLocation) {
         this.id = id;
         this.description = description;
         this.cals = cals;

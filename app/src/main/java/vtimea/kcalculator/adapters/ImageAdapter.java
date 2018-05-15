@@ -90,7 +90,7 @@ public class ImageAdapter extends BaseAdapter{
         DaoSession daoSession = DataManager.getInstance().getDaoSession();
         FoodItemDao foodItemDao = daoSession.getFoodItemDao();
         QueryBuilder queryBuilder = foodItemDao.queryBuilder()
-                .where(FoodItemDao.Properties.Date.eq(currentDate), FoodItemDao.Properties.PhotoId.notEq(""));
+                .where(FoodItemDao.Properties.Date.eq(currentDate), FoodItemDao.Properties.PhotoLocation.notEq(""));
         List<FoodItem> list = queryBuilder.list();
         return list;
     }

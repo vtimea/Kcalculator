@@ -87,10 +87,10 @@ public class AddItemActivity extends AppCompatActivity {
                 try{
                     cals = Integer.parseInt(sCals);
                 } catch (NumberFormatException e){
-                    etCals.setError("Please enter a valid number!");
+                    etCals.setError(getString(R.string.error_invalid_number));
                 }
                 if(cals == 0) {
-                    etCals.setError("Please enter a valid number!");
+                    etCals.setError(getString(R.string.error_invalid_number));
                     return;
                 }
                 String photoId = mCurrentPhotoPath;

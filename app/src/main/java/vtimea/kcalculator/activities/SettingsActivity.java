@@ -1,5 +1,6 @@
 package vtimea.kcalculator.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,6 +40,12 @@ public class SettingsActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private TextView etCals;
     private Button btnCalculate;
+
+    Spinner spGender;
+    EditText etHeight ;
+    EditText etWeight;
+    EditText etAge;
+    Spinner spActivity;
 
     private enum ActivityLevel{
         SEDENTARY(1.2), MODERATELY_ACTIVE(1.3), ACTIVE(1.4);
@@ -127,11 +134,11 @@ public class SettingsActivity extends AppCompatActivity {
                 View alertLayout = inflater.inflate(R.layout.dialog_calc_calories, null);
 
                 //init components on dialog
-                final Spinner spGender = alertLayout.findViewById(R.id.spGender);
-                final EditText etHeight = alertLayout.findViewById(R.id.etHeight);
-                final EditText etWeight = alertLayout.findViewById(R.id.etWeight);
-                final EditText etAge = alertLayout.findViewById(R.id.etAge);
-                final Spinner spActivity = alertLayout.findViewById(R.id.spActivityLevel);
+                spGender = alertLayout.findViewById(R.id.spGender);
+                etHeight = alertLayout.findViewById(R.id.etHeight);
+                etWeight = alertLayout.findViewById(R.id.etWeight);
+                etAge = alertLayout.findViewById(R.id.etAge);
+                spActivity = alertLayout.findViewById(R.id.spActivityLevel);
 
 
                 //init alert dialog
@@ -153,37 +160,39 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //getting the numbers from the edittexts
-                        int height = Integer.parseInt(etHeight.getText().toString());
-                        int weight = Integer.parseInt(etWeight.getText().toString());
-                        int age = Integer.parseInt(etAge.getText().toString());
-                        boolean isMale = spGender.getSelectedItemPosition() == 0;
-                        ActivityLevel activityLevel;
-                        switch (spActivity.getSelectedItemPosition()){
-                            case 0:
-                                activityLevel = ActivityLevel.SEDENTARY;
-                                break;
-                            case 1:
-                                activityLevel = ActivityLevel.MODERATELY_ACTIVE;
-                                break;
-                            case 2:
-                                activityLevel = ActivityLevel.ACTIVE;
-                                break;
-                            default:
-                                activityLevel = ActivityLevel.SEDENTARY;
-                                break;
-                        }
-
-                        //calculate and save calories
-                        int calories = calculateCalories(isMale, height, weight, age, activityLevel);
-                        saveCaloresToPrefs(calories);
-                        etCals.setText(Integer.toString(calories));
-                        etCals.clearFocus();
+//                        int height = Integer.parseInt(etHeight.getText().toString());
+//                        int weight = Integer.parseInt(etWeight.getText().toString());
+//                        int age = Integer.parseInt(etAge.getText().toString());
+//                        boolean isMale = spGender.getSelectedItemPosition() == 0;
+//                        ActivityLevel activityLevel;
+//                        switch (spActivity.getSelectedItemPosition()){
+//                            case 0:
+//                                activityLevel = ActivityLevel.SEDENTARY;
+//                                break;
+//                            case 1:
+//                                activityLevel = ActivityLevel.MODERATELY_ACTIVE;
+//                                break;
+//                            case 2:
+//                                activityLevel = ActivityLevel.ACTIVE;
+//                                break;
+//                            default:
+//                                activityLevel = ActivityLevel.SEDENTARY;
+//                                break;
+//                        }
+//
+//                        //calculate and save calories
+//                        int calories = calculateCalories(isMale, height, weight, age, activityLevel);
+//                        saveCaloresToPrefs(calories);
+//                        etCals.setText(Integer.toString(calories));
+//                        etCals.clearFocus();
                     }
                 });
 
                 //show dialog
                 AlertDialog dialog = alert.create();
                 dialog.show();
+                Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                button.setOnClickListener(new CustomListener(dialog));
             }
         });
     }
@@ -249,6 +258,61 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         int calories = preferences.getInt(PREF_CALS, DEFAULT_CALORIES);
         return calories;
+    }
+
+    class CustomListener implements View.OnClickListener {
+        private final Dialog dialog;
+        public CustomListener(Dialog dialog) {
+            this.dialog = dialog;
+        }
+
+        @Override
+        public void onClick(View v) {
+            String sHeight = etHeight.getText().toString();
+            String sWeight = etWeight.getText().toString();
+            String sAge = etAge.getText().toString();
+
+            if(!sHeight.equals("") && !sWeight.equals("") && !sAge.equals("")){
+                int height = Integer.parseInt(etHeight.getText().toString());
+                int weight = Integer.parseInt(etWeight.getText().toString());
+                int age = Integer.parseInt(etAge.getText().toString());
+                boolean isMale = spGender.getSelectedItemPosition() == 0;
+                ActivityLevel activityLevel;
+                switch (spActivity.getSelectedItemPosition()){
+                    case 0:
+                        activityLevel = ActivityLevel.SEDENTARY;
+                        break;
+                    case 1:
+                        activityLevel = ActivityLevel.MODERATELY_ACTIVE;
+                        break;
+                    case 2:
+                        activityLevel = ActivityLevel.ACTIVE;
+                        break;
+                    default:
+                        activityLevel = ActivityLevel.SEDENTARY;
+                        break;
+                }
+
+                //calculate and save calories
+                int calories = calculateCalories(isMale, height, weight, age, activityLevel);
+                saveCaloresToPrefs(calories);
+                etCals.setText(Integer.toString(calories));
+                etCals.clearFocus();
+
+                dialog.dismiss();
+            }
+
+            if(sHeight.equals(""))
+                etHeight.setError(getString(R.string.error_invalid_number));
+
+            if(sWeight.equals(""))
+                etWeight.setError(getString(R.string.error_invalid_number));
+
+            if(sAge.equals(""))
+                etAge.setError(getString(R.string.error_invalid_number));
+
+
+        }
     }
 
 }

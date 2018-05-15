@@ -21,6 +21,7 @@
     <string name="cancel">Cancel</string>
     <string name="alert_title">Calculate your calories</string>
     <string name="done">Done</string>
+    <string name="error_invalid_number">Please enter a valid number!</string>
 
     <string-array name="genders">
         <item>Male</item>

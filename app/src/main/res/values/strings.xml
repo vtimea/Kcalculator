@@ -22,6 +22,10 @@
     <string name="alert_title">Calculate your calories</string>
     <string name="done">Done</string>
     <string name="error_invalid_number">Please enter a valid number!</string>
+    <string name="activity_title_home">Home</string>
+    <string name="activity_title_add_item">Add a new item</string>
+    <string name="activity_title_graphs">Graphs</string>
+    <string name="activity_title_settings">Settings</string>
 
     <string-array name="genders">
         <item>Male</item>

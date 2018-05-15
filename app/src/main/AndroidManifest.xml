@@ -11,16 +11,22 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.HomeActivity"
-            android:label="@string/app_name">
+            android:label="@string/activity_title_home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.GraphsActivity" />
-        <activity android:name=".activities.AddItemActivity" />
-        <activity android:name=".activities.SettingsActivity"></activity>
+
+        <activity android:name=".activities.GraphsActivity"
+                  android:label="@string/activity_title_graphs"/>
+
+        <activity android:name=".activities.AddItemActivity"
+                  android:label="@string/activity_title_add_item"/>
+
+        <activity android:name=".activities.SettingsActivity"
+                  android:label="@string/activity_title_settings"></activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="vtimea.kcalculator.fileprovider"

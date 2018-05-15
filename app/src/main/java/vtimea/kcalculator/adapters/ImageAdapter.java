@@ -66,13 +66,11 @@ public class ImageAdapter extends BaseAdapter{
         ImageView imageView;
         if (view == null) {
             imageView = new ImageView(mContext);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         } else {
-            Log.i("PERFORMLOG", "---> CACHE <---");
             imageView = (ImageView) view;
         }
 
-        Log.i("PERFORMLOG", "---> NEM CACHE <---");
         if(photos.size()-1 >= i)
             imageView.setImageBitmap(photos.get(i));
 

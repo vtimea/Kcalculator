@@ -1,6 +1,9 @@
 package vtimea.kcalculator.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -12,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,7 @@ import vtimea.kcalculator.data.FoodItemDao;
 public class AddItemActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
 
+    private ImageView imageView;
     private Date currentDate;
     private String mCurrentPhotoPath = "";
 
@@ -37,6 +42,7 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+        imageView = findViewById(R.id.ivPreview);
 
         //set date
         Date temp = Calendar.getInstance().getTime();
@@ -47,6 +53,18 @@ public class AddItemActivity extends AppCompatActivity {
         initFabOk();
         initFabCancel();
         initAddPhotoButton();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == REQUEST_TAKE_PHOTO){
+            if(resultCode == AddItemActivity.RESULT_OK){
+                Log.i("LOG", "RESULT OK!");
+                Uri uri = Uri.fromFile(new File(mCurrentPhotoPath));
+                Bitmap thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(uri.getPath()), 450, 450);
+                imageView.setImageBitmap(thumbnail);
+            }
+        }
     }
 
     private void initFabOk(){

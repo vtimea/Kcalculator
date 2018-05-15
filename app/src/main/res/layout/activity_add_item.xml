@@ -53,6 +53,14 @@
         android:layout_alignRight="@+id/etDesc"
         android:text="Add photo" />
 
+    <ImageView
+        android:id="@+id/ivPreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etCals"
+        android:layout_alignStart="@+id/etCals"
+        android:layout_centerVertical="true" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabOk"
         android:layout_width="50dp"
